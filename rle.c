@@ -8,6 +8,10 @@
 #include <inttypes.h>
 //#include <sys/types.h>
 
+#define ASSERT_CONCAT_(a, b) a##b
+#define ASSERT_CONCAT(a, b) ASSERT_CONCAT_(a, b)
+#define ct_assert(e) enum { ASSERT_CONCAT(assert_line_, __LINE__) = 1/(!!(e)) }
+
 // p == 0 -> 1.0
 #define PERCENT(p, max) \
 ((typeof (max))rint((p)*(max)))
@@ -204,8 +208,11 @@ void print_fill(enum MaskType mtype, struct Resolution res, float percent) {
 
 int main() {
     // FIXME: These should be a compiler asserts. Get one from ccan.
-    assert(sizeof(enum RLEOp) == 1);
-    assert(sizeof(struct RLE) == 4);
+//    assert(sizeof(enum RLEOp) == 1);
+//    assert(sizeof(struct RLE) == 4);
+    
+    ct_assert(sizeof(enum RLEOp) == 1);  
+    ct_assert(sizeof(struct RLE) == 4);  
     
     struct Resolution res = { .x = 1280, .y = 720 };
     
